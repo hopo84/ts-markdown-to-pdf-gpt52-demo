@@ -132,9 +132,30 @@ async function main() {
           line-height: 1.7;
           padding: 40px;
         }
-        h1, h2, h3 { margin-top: 1.2em; }
+        /* 标题样式 - 统一使用深蓝色 */
+        h1, h2, h3, h4, h5, h6 {
+          margin-top: 1.2em;
+          color: #354869 !important;
+          font-weight: 600;
+        }
+        h1 {
+          margin-bottom: 0.8em;
+          font-size: 2em;
+        }
+        h2 {
+          margin-bottom: 0.6em;
+          font-size: 1.5em;
+        }
+        h3 {
+          margin-bottom: 0.5em;
+          font-size: 1.25em;
+        }
         img { max-width: 100%; margin: 20px 0; }
-        strong { font-weight: 600; }
+        /* 加粗文字样式 - 统一使用深蓝色 */
+        strong, b {
+          font-weight: 600;
+          color: #354869 !important;
+        }
         /* 确保所有代码块都应用黑底白字样式 */
         pre {
           padding: 16px 20px;
