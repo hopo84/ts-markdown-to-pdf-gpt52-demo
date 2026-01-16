@@ -156,27 +156,32 @@ async function main() {
           font-weight: 600;
           color: #354869 !important;
         }
-        /* 引用块样式 */
+        /* 引用块样式 - 灰色斜体 */
         blockquote {
           margin: 20px 0;
           padding: 16px 20px;
           background: #f8f9fa;
           border-left: 4px solid #354869;
           border-radius: 0 4px 4px 0;
-          color: #555;
+          color: #666;
           font-size: 14px;
           line-height: 1.6;
+          font-style: italic;
         }
         blockquote p {
           margin: 0;
           padding: 0;
+          font-style: italic;
         }
         blockquote strong {
           color: #354869 !important;
+          font-style: normal;
+          font-weight: 600;
         }
         blockquote code {
           background: #e8e8e8;
           color: #354869;
+          font-style: normal;
         }
         /* 表格样式 */
         table {
