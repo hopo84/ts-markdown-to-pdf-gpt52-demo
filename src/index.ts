@@ -229,14 +229,16 @@ async function main() {
           font-family: inherit;
           color: inherit;
         }
-        /* 行内代码 */
+        /* 行内代码 - 灰色背景 */
         code:not(pre code) {
           font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-          background: #191922;
-          color: #e8eaf6;
+          background: #f0f0f0;
+          color: #354869;
           padding: 2px 6px;
           border-radius: 3px;
+          border: 1px solid #d0d0d0;
           font-size: 0.9em;
+          font-weight: 500;
         }
       </style>
     </head>
