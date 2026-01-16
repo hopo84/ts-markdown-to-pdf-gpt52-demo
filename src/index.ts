@@ -156,6 +156,36 @@ async function main() {
           font-weight: 600;
           color: #354869 !important;
         }
+        /* 表格样式 */
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 20px 0;
+          border: 2px solid #354869;
+          font-size: 14px;
+        }
+        thead {
+          background-color: #f5f7fa;
+        }
+        th {
+          background-color: #f5f7fa;
+          color: #354869;
+          font-weight: 600;
+          padding: 12px 16px;
+          text-align: left;
+          border: 1px solid #354869;
+        }
+        td {
+          padding: 10px 16px;
+          border: 1px solid #354869;
+          color: #333;
+        }
+        tr:nth-child(even) {
+          background-color: #fafbfc;
+        }
+        tr:hover {
+          background-color: #f0f2f5;
+        }
         /* 确保所有代码块都应用黑底白字样式 */
         pre {
           padding: 16px 20px;
