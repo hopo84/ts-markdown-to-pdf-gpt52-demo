@@ -24,7 +24,7 @@ function escapeHtml(str: string): string {
 // 解析命令行参数
 function parseArgs(): { file: string } {
   const args = process.argv.slice(2);
-  let file = "1.md"; // 默认文件
+  let file = "1.md"; // 默认文件（支持 .md 和 .html）
 
   for (let i = 0; i < args.length; i++) {
     if ((args[i] === "-f" || args[i] === "--file") && args[i + 1]) {
@@ -45,31 +45,52 @@ async function main() {
   if (!fs.existsSync(inputPath)) {
     console.error(`错误: 文件 "${inputPath}" 不存在！`);
     console.log(`\n使用方法: npm start -- -f <文件名>`);
-    console.log(`示例: npm start -- -f 1.md`);
+    console.log(`示例: npm start -- -f 1.md 或 npm start -- -f 1.html`);
     process.exit(1);
   }
 
-  console.log(`正在处理文件: ${inputPath}`);
+  // 检测文件类型
+  const fileExt = file.toLowerCase().match(/\.(md|html)$/i)?.[1];
+  if (!fileExt) {
+    console.error(`错误: 不支持的文件类型！仅支持 .md 和 .html 文件`);
+    process.exit(1);
+  }
+
+  console.log(`正在处理文件: ${inputPath} (${fileExt.toUpperCase()})`);
   
   // 提取文件名（不含扩展名）用于输出文件名
-  const fileNameWithoutExt = file.replace(/\.md$/i, "");
-  const md = new MarkdownIt({
-    html: true,
-    linkify: true,
-    typographer: true,
-    highlight: function (str: string, lang?: string): string {
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          return '<pre class="hljs" style="background: #191922 !important; color: #e8eaf6 !important; padding: 16px 20px; border-radius: 8px; border: 1px solid #3e4451; margin: 16px 0; font-family: \'SF Mono\', Monaco, \'Cascadia Code\', \'Roboto Mono\', Consolas, \'Courier New\', monospace; tab-size: 4; white-space: pre; overflow-x: auto;"><code style="background: transparent !important; color: #e8eaf6 !important; font-family: inherit; font-size: 13px; line-height: 1.5; display: block; padding: 0; margin: 0;">' +
-                 hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-                 '</code></pre>';
-        } catch (__) {}
+  const fileNameWithoutExt = file.replace(/\.(md|html)$/i, "");
+  
+  // 读取文件内容
+  const fileContent = fs.readFileSync(inputPath, "utf-8");
+  
+  // 根据文件类型处理内容
+  let htmlBody: string;
+  
+  if (fileExt === "md") {
+    // Markdown 文件：使用 markdown-it 渲染
+    console.log("📝 使用 Markdown 渲染器处理...");
+    const md = new MarkdownIt({
+      html: true,
+      linkify: true,
+      typographer: true,
+      highlight: function (str: string, lang?: string): string {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return '<pre class="hljs" style="background: #191922 !important; color: #e8eaf6 !important; padding: 16px 20px; border-radius: 8px; border: 1px solid #3e4451; margin: 16px 0; font-family: \'SF Mono\', Monaco, \'Cascadia Code\', \'Roboto Mono\', Consolas, \'Courier New\', monospace; tab-size: 4; white-space: pre; overflow-x: auto;"><code style="background: transparent !important; color: #e8eaf6 !important; font-family: inherit; font-size: 13px; line-height: 1.5; display: block; padding: 0; margin: 0;">' +
+                   hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+                   '</code></pre>';
+          } catch (__) {}
+        }
+        return '<pre class="hljs" style="background: #191922 !important; color: #e8eaf6 !important; padding: 16px 20px; border-radius: 8px; border: 1px solid #3e4451; margin: 16px 0; font-family: \'SF Mono\', Monaco, \'Cascadia Code\', \'Roboto Mono\', Consolas, \'Courier New\', monospace; tab-size: 4; white-space: pre; overflow-x: auto;"><code style="background: transparent !important; color: #e8eaf6 !important; font-family: inherit; font-size: 13px; line-height: 1.5; display: block; padding: 0; margin: 0;">' + escapeHtml(str) + '</code></pre>';
       }
-      return '<pre class="hljs" style="background: #191922 !important; color: #e8eaf6 !important; padding: 16px 20px; border-radius: 8px; border: 1px solid #3e4451; margin: 16px 0; font-family: \'SF Mono\', Monaco, \'Cascadia Code\', \'Roboto Mono\', Consolas, \'Courier New\', monospace; tab-size: 4; white-space: pre; overflow-x: auto;"><code style="background: transparent !important; color: #e8eaf6 !important; font-family: inherit; font-size: 13px; line-height: 1.5; display: block; padding: 0; margin: 0;">' + escapeHtml(str) + '</code></pre>';
-    }
-  });
-  const markdown = fs.readFileSync(inputPath, "utf-8");
-  const htmlBody = md.render(markdown);
+    });
+    htmlBody = md.render(fileContent);
+  } else {
+    // HTML 文件：直接使用内容
+    console.log("🌐 直接读取 HTML 内容...");
+    htmlBody = fileContent;
+  }
 
   // 读取 highlight.js 的 Atom One Dark 主题 CSS（黑底白字）
   const highlightCss = fs.readFileSync(
@@ -87,6 +108,119 @@ async function main() {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
           color-adjust: exact !important;
+        }
+        /* 强制覆盖 HTML 文件中的所有宽度和内边距限制 */
+        @page {
+          margin: 8mm !important;
+          size: A4 portrait !important;
+        }
+        /* 确保 body 使用全宽 */
+        html, body {
+          max-width: 100% !important;
+          width: 100% !important;
+          padding: 10px 15px !important;
+          margin: 0 !important;
+          background: white !important;
+        }
+        /* 覆盖容器类的宽度限制 */
+        .container,
+        .content,
+        .main,
+        .wrapper,
+        article,
+        section,
+        .header,
+        header,
+        main {
+          max-width: 100% !important;
+          width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          padding-top: 10px !important;
+          padding-bottom: 10px !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+        }
+        /* Header 样式优化 - 适用于所有HTML */
+        .header,
+        header,
+        div[class*="header"] {
+          text-align: center !important;
+        }
+        .header h1,
+        .header h2,
+        .header p,
+        .header span,
+        .header div,
+        .header *,
+        header h1,
+        header h2,
+        header p,
+        header span,
+        header div,
+        header * {
+          color: #ffffff !important;
+        }
+        .meta-info,
+        .header .meta-info,
+        header .meta-info,
+        div[class*="meta"] {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          text-align: center !important;
+          flex-direction: row !important;
+          gap: 20px !important;
+        }
+        .meta-info span,
+        .header .meta-info span {
+          color: #ffffff !important;
+        }
+        /* 移除所有阴影效果 */
+        * {
+          box-shadow: none !important;
+          text-shadow: none !important;
+        }
+        /* 只针对价格卡片的 Grid 布局修复 */
+        .stats-grid {
+          display: flex !important;
+          flex-wrap: wrap !important;
+          gap: 15px !important;
+          justify-content: space-between !important;
+          margin: 20px 0 !important;
+        }
+        .stat-card,
+        .stats-grid > div {
+          flex: 1 1 calc(33% - 10px) !important;
+          min-width: 200px !important;
+          max-width: calc(33% - 10px) !important;
+          display: inline-block !important;
+          vertical-align: top !important;
+          box-shadow: none !important;
+          border-radius: 8px !important;
+          padding: 20px !important;
+          margin: 0 !important;
+        }
+        /* 确保其他内容块正常显示 */
+        .product-card,
+        .abstract,
+        .highlight-box,
+        .conclusion-box,
+        blockquote,
+        p,
+        .content > div:not(.stats-grid) {
+          display: block !important;
+          width: 100% !important;
+          flex: none !important;
+        }
+        /* 标题字号调整 */
+        .header h1 {
+          font-size: 2em !important;
+        }
+        .header p {
+          font-size: 1em !important;
         }
         ${highlightCss}
         /* 强制覆盖所有 highlight.js 样式，确保黑底白字 */
@@ -159,9 +293,13 @@ async function main() {
         }
         body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-          line-height: 1.7;
-          padding: 40px;
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+          line-height: 1.6 !important;
+          padding: 15px 20px !important;
+          max-width: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          box-sizing: border-box !important;
         }
         /* 标题样式 - 统一使用深蓝色 */
         h1, h2, h3, h4, h5, h6 {
@@ -317,7 +455,7 @@ async function main() {
   await page.pdf({
     path: outputPath,
     format: "A4",
-    margin: { top: "20mm", bottom: "20mm", left: "15mm", right: "15mm" },
+    margin: { top: "12mm", bottom: "12mm", left: "8mm", right: "8mm" },
     printBackground: true  // 强制打印背景色
   });
 
