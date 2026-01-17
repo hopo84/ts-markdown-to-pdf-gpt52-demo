@@ -128,8 +128,7 @@ async function main() {
         }
         body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-            "Apple Color Emoji", "Segoe UI Emoji", "Noto Emoji", "Android Emoji", sans-serif;
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
           line-height: 1.7;
           padding: 40px;
         }
@@ -138,9 +137,6 @@ async function main() {
           margin-top: 1.2em;
           color: #354869 !important;
           font-weight: 600;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-            "Apple Color Emoji", "Segoe UI Emoji", "Noto Emoji", "Android Emoji", sans-serif;
         }
         h1 {
           margin-bottom: 0.8em;
@@ -155,16 +151,6 @@ async function main() {
           font-size: 1.25em;
         }
         img { max-width: 100%; margin: 20px 0; }
-        /* 列表样式 - 支持 emoji */
-        ul, ol {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-            "Apple Color Emoji", "Segoe UI Emoji", "Noto Emoji", "Android Emoji", sans-serif;
-        }
-        li {
-          margin: 8px 0;
-          line-height: 1.6;
-        }
         /* 加粗文字样式 - 统一使用深蓝色 */
         strong, b {
           font-weight: 600;
@@ -181,9 +167,6 @@ async function main() {
           font-size: 14px;
           line-height: 1.6;
           font-style: italic;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-            "Apple Color Emoji", "Segoe UI Emoji", "Noto Emoji", "Android Emoji", sans-serif;
         }
         blockquote p {
           margin: 0;
@@ -292,16 +275,8 @@ async function main() {
   </html>
   `;
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [
-      '--font-render-hinting=none',
-      '--force-color-profile=srgb',
-      '--disable-font-subpixel-positioning'
-    ]
-  });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.emulateMediaType('screen');
   await page.setContent(html, { waitUntil: "networkidle0" });
 
   // 生成秒级时间戳
