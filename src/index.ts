@@ -37,7 +37,7 @@ async function main() {
       return '<pre class="hljs" style="background: #191922 !important; color: #e8eaf6 !important; padding: 16px 20px; border-radius: 8px; border: 1px solid #3e4451; margin: 16px 0; font-family: \'SF Mono\', Monaco, \'Cascadia Code\', \'Roboto Mono\', Consolas, \'Courier New\', monospace; tab-size: 4; white-space: pre; overflow-x: auto;"><code style="background: transparent !important; color: #e8eaf6 !important; font-family: inherit; font-size: 13px; line-height: 1.5; display: block; padding: 0; margin: 0;">' + escapeHtml(str) + '</code></pre>';
     }
   });
-  const markdown = fs.readFileSync("sample.md", "utf-8");
+  const markdown = fs.readFileSync("input/1.md", "utf-8");
   const htmlBody = md.render(markdown);
 
   // 读取 highlight.js 的 Atom One Dark 主题 CSS（黑底白字）
