@@ -21,7 +21,38 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
+// 解析命令行参数
+function parseArgs(): { file: string } {
+  const args = process.argv.slice(2);
+  let file = "1.md"; // 默认文件
+
+  for (let i = 0; i < args.length; i++) {
+    if ((args[i] === "-f" || args[i] === "--file") && args[i + 1]) {
+      file = args[i + 1];
+      break;
+    }
+  }
+
+  return { file };
+}
+
 async function main() {
+  // 解析命令行参数
+  const { file } = parseArgs();
+  const inputPath = join("input", file);
+
+  // 检查文件是否存在
+  if (!fs.existsSync(inputPath)) {
+    console.error(`错误: 文件 "${inputPath}" 不存在！`);
+    console.log(`\n使用方法: npm start -- -f <文件名>`);
+    console.log(`示例: npm start -- -f 1.md`);
+    process.exit(1);
+  }
+
+  console.log(`正在处理文件: ${inputPath}`);
+  
+  // 提取文件名（不含扩展名）用于输出文件名
+  const fileNameWithoutExt = file.replace(/\.md$/i, "");
   const md = new MarkdownIt({
     html: true,
     linkify: true,
@@ -37,7 +68,7 @@ async function main() {
       return '<pre class="hljs" style="background: #191922 !important; color: #e8eaf6 !important; padding: 16px 20px; border-radius: 8px; border: 1px solid #3e4451; margin: 16px 0; font-family: \'SF Mono\', Monaco, \'Cascadia Code\', \'Roboto Mono\', Consolas, \'Courier New\', monospace; tab-size: 4; white-space: pre; overflow-x: auto;"><code style="background: transparent !important; color: #e8eaf6 !important; font-family: inherit; font-size: 13px; line-height: 1.5; display: block; padding: 0; margin: 0;">' + escapeHtml(str) + '</code></pre>';
     }
   });
-  const markdown = fs.readFileSync("input/1.md", "utf-8");
+  const markdown = fs.readFileSync(inputPath, "utf-8");
   const htmlBody = md.render(markdown);
 
   // 读取 highlight.js 的 Atom One Dark 主题 CSS（黑底白字）
@@ -281,7 +312,7 @@ async function main() {
 
   // 生成秒级时间戳
   const timestamp = Math.floor(Date.now() / 1000);
-  const outputPath = `output/output_${timestamp}.pdf`;
+  const outputPath = `output/output_${fileNameWithoutExt}_${timestamp}.pdf`;
 
   await page.pdf({
     path: outputPath,
