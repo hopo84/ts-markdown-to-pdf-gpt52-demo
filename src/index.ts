@@ -143,6 +143,41 @@ async function main() {
           box-shadow: none !important;
           border-radius: 0 !important;
         }
+        /* Header 样式优化 - 适用于所有HTML */
+        .header,
+        header,
+        div[class*="header"] {
+          text-align: center !important;
+        }
+        .header h1,
+        .header h2,
+        .header p,
+        .header span,
+        .header div,
+        .header *,
+        header h1,
+        header h2,
+        header p,
+        header span,
+        header div,
+        header * {
+          color: #ffffff !important;
+        }
+        .meta-info,
+        .header .meta-info,
+        header .meta-info,
+        div[class*="meta"] {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          text-align: center !important;
+          flex-direction: row !important;
+          gap: 20px !important;
+        }
+        .meta-info span,
+        .header .meta-info span {
+          color: #ffffff !important;
+        }
         /* 移除所有阴影效果 */
         * {
           box-shadow: none !important;
