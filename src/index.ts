@@ -181,8 +181,10 @@ async function main() {
         body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
             "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-          line-height: 1.7;
-          padding: 40px;
+          line-height: 1.6;
+          padding: 15px 20px;
+          max-width: 100%;
+          margin: 0;
         }
         /* 标题样式 - 统一使用深蓝色 */
         h1, h2, h3, h4, h5, h6 {
@@ -338,7 +340,7 @@ async function main() {
   await page.pdf({
     path: outputPath,
     format: "A4",
-    margin: { top: "20mm", bottom: "20mm", left: "15mm", right: "15mm" },
+    margin: { top: "12mm", bottom: "12mm", left: "8mm", right: "8mm" },
     printBackground: true  // 强制打印背景色
   });
 
