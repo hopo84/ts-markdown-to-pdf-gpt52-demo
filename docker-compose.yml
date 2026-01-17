@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  md-to-pdf:
+    build: .
+    image: ts-markdown-to-pdf:latest
+    container_name: md-to-pdf-converter
+    volumes:
+      # 挂载本地 input 目录到容器
+      - ./input:/app/input
+      # 挂载本地 output 目录到容器
+      - ./output:/app/output
+    # 默认命令（可以被覆盖）
+    command: npm start -- -f 1.md
+    # 如果需要处理不同文件，使用以下格式：
+    # command: npm start -- -f your-file.md

@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+dist
+output/*.pdf
+.git
+.gitignore
+.DS_Store
+*.md
+!input/*.md
+README.md

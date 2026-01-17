@@ -3,6 +3,38 @@
 
 一个基于 TypeScript 的 Markdown 转 PDF 工具，支持代码高亮、中文字体、表格和图片。
 
+## 📦 部署方式
+
+本项目支持两种部署方式：
+
+### 方式 1：本地运行（Node.js）
+
+适合开发环境和本地使用。
+
+### 方式 2：Docker 部署（推荐生产环境）
+
+适合生产环境和服务器部署。详见：**[Docker 部署指南](./DOCKER_DEPLOY.md)**
+
+---
+
+## 🚀 快速开始
+
+### 使用 Docker（推荐）
+
+```bash
+# 1. 构建镜像
+docker-compose build
+
+# 2. 运行转换
+docker-compose run --rm md-to-pdf npm start -- -f 1.md
+
+# 3. 批量转换（使用脚本）
+chmod +x batch-convert.sh
+./batch-convert.sh
+```
+
+### 本地运行
+
 ## 安装
 
 ```bash
@@ -44,13 +76,32 @@ npm start -- --file 3.md
 └── README.md
 ```
 
-## 特性
+## ✨ 特性
 
 - ✅ 支持代码语法高亮（基于 highlight.js）
 - ✅ 优秀的中文字体渲染
 - ✅ 支持表格、图片、引用块
 - ✅ 命令行参数支持
 - ✅ 自动文件名生成
+- ✅ Docker 容器化部署
+- ✅ 批量转换脚本
+
+## 📚 文档
+
+- **[Docker 部署指南](./DOCKER_DEPLOY.md)** - 完整的 Docker 部署和使用说明
+- **[批量转换脚本](./batch-convert.sh)** - 一键批量处理所有 Markdown 文件
+
+## 🔧 技术栈
+
+- TypeScript
+- Puppeteer（Chrome Headless）
+- Markdown-it
+- Highlight.js
+- Docker
+
+## 📄 许可证
+
+MIT
 
 
 ## 目前遗留问题
