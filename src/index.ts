@@ -109,6 +109,43 @@ async function main() {
           print-color-adjust: exact !important;
           color-adjust: exact !important;
         }
+        /* 强制覆盖 HTML 文件中的所有宽度和内边距限制 */
+        @page {
+          margin: 8mm !important;
+          size: A4 portrait !important;
+        }
+        /* 确保 body 使用全宽 */
+        html, body {
+          max-width: 100% !important;
+          width: 100% !important;
+          padding: 10px 15px !important;
+          margin: 0 !important;
+          background: white !important;
+        }
+        /* 覆盖容器类的宽度限制 */
+        .container,
+        .content,
+        .main,
+        .wrapper,
+        article,
+        section,
+        .header,
+        header,
+        main,
+        div[class*="container"],
+        div[class*="wrapper"],
+        div[class*="content"] {
+          max-width: 100% !important;
+          width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          padding-top: 10px !important;
+          padding-bottom: 10px !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+        }
         ${highlightCss}
         /* 强制覆盖所有 highlight.js 样式，确保黑底白字 */
         pre.hljs,
@@ -180,11 +217,13 @@ async function main() {
         }
         body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-          line-height: 1.6;
-          padding: 15px 20px;
-          max-width: 100%;
-          margin: 0;
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+          line-height: 1.6 !important;
+          padding: 15px 20px !important;
+          max-width: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          box-sizing: border-box !important;
         }
         /* 标题样式 - 统一使用深蓝色 */
         h1, h2, h3, h4, h5, h6 {
