@@ -131,10 +131,7 @@ async function main() {
         section,
         .header,
         header,
-        main,
-        div[class*="container"],
-        div[class*="wrapper"],
-        div[class*="content"] {
+        main {
           max-width: 100% !important;
           width: 100% !important;
           margin-left: 0 !important;
@@ -145,6 +142,50 @@ async function main() {
           padding-bottom: 10px !important;
           box-shadow: none !important;
           border-radius: 0 !important;
+        }
+        /* 移除所有阴影效果 */
+        * {
+          box-shadow: none !important;
+          text-shadow: none !important;
+        }
+        /* 只针对价格卡片的 Grid 布局修复 */
+        .stats-grid {
+          display: flex !important;
+          flex-wrap: wrap !important;
+          gap: 15px !important;
+          justify-content: space-between !important;
+          margin: 20px 0 !important;
+        }
+        .stat-card,
+        .stats-grid > div {
+          flex: 1 1 calc(33% - 10px) !important;
+          min-width: 200px !important;
+          max-width: calc(33% - 10px) !important;
+          display: inline-block !important;
+          vertical-align: top !important;
+          box-shadow: none !important;
+          border-radius: 8px !important;
+          padding: 20px !important;
+          margin: 0 !important;
+        }
+        /* 确保其他内容块正常显示 */
+        .product-card,
+        .abstract,
+        .highlight-box,
+        .conclusion-box,
+        blockquote,
+        p,
+        .content > div:not(.stats-grid) {
+          display: block !important;
+          width: 100% !important;
+          flex: none !important;
+        }
+        /* 标题字号调整 */
+        .header h1 {
+          font-size: 2em !important;
+        }
+        .header p {
+          font-size: 1em !important;
         }
         ${highlightCss}
         /* 强制覆盖所有 highlight.js 样式，确保黑底白字 */
